@@ -321,7 +321,7 @@ async function postReport(req, res, next) {
                     try {
 
                         let ext = fname.substr(fname.lastIndexOf('.') + 1);
-                        let urlLink = "http://localhost:3000" + "/getFile?file=" + fname;
+                        let urlLink = "https://tristar-backend.onrender.com" + "/getFile?file=" + fname;
 
                         let _data = { 'ext': ext, 'url': urlLink };
                         // console.log('line 600', _data);
