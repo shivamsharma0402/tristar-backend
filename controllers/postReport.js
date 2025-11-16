@@ -49,68 +49,68 @@ function mapLineItemsToVars(str1, str2) {
 
 async function postReport(req, res, next) {
     try {
-        let data = {
-            crm_id: "CRM-10233213",
-            received_on: "2025-01-10",
-            attended_on: "2025-01-12",
-            cognised_on: "2025-01-13",
+        // let data = {
+        //     crm_id: "CRM-10233213",
+        //     received_on: "2025-01-10",
+        //     attended_on: "2025-01-12",
+        //     cognised_on: "2025-01-13",
 
-            customer_name_address: "ABC Industries, Plot 45, Industrial Area, Delhi",
-            customer_contact_person: "Rohit Kumar",
-            customer_contact_number: "9876543210",
-            customer_email_id: "support@abcindustries.com",
-            customer_website: "https://abcindustries.com",
+        //     customer_name_address: "ABC Industries, Plot 45, Industrial Area, Delhi",
+        //     customer_contact_person: "Rohit Kumar",
+        //     customer_contact_number: "9876543210",
+        //     customer_email_id: "support@abcindustries.com",
+        //     customer_website: "https://abcindustries.com",
 
-            nature_of_complaints: "UPS not switching to backup",
-            serial_number: "UPS-SN-884422",
-            equipment_model: "SmartX-10KVA",
-            equipment_capic: "10 KVA",
-            equipment_product: "UPS System",
-            equipment_configuration: "Online UPS with external batteries",
-            battery_details: "SMF 12V 9AH x 16",
-            type_of_faults: "Power supply fault",
+        //     nature_of_complaints: "UPS not switching to backup",
+        //     serial_number: "UPS-SN-884422",
+        //     equipment_model: "SmartX-10KVA",
+        //     equipment_capic: "10 KVA",
+        //     equipment_product: "UPS System",
+        //     equipment_configuration: "Online UPS with external batteries",
+        //     battery_details: "SMF 12V 9AH x 16",
+        //     type_of_faults: "Power supply fault",
 
-            complaint_details: "Customer reported UPS not switching to battery mode.",
-            diagnosis_observation: "Found faulty charging card.",
-            collective_action_remarks: "Replaced charging card and tested successfully.",
+        //     complaint_details: "Customer reported UPS not switching to battery mode.",
+        //     diagnosis_observation: "Found faulty charging card.",
+        //     collective_action_remarks: "Replaced charging card and tested successfully.",
 
-            ip_volts_RN: "230",
-            ip_volts_YN: "231",
-            ip_volts_BN: "229",
+        //     ip_volts_RN: "230",
+        //     ip_volts_YN: "231",
+        //     ip_volts_BN: "229",
 
-            DC_op_vol: "108",
-            DC_op_amp: "12",
+        //     DC_op_vol: "108",
+        //     DC_op_amp: "12",
 
-            battery_vol: "13.4",
-            battery_amp: "7.5",
+        //     battery_vol: "13.4",
+        //     battery_amp: "7.5",
 
-            op_volts_RN: "230",
-            op_volts_YN: "232",
-            op_volts_BN: "228",
+        //     op_volts_RN: "230",
+        //     op_volts_YN: "232",
+        //     op_volts_BN: "228",
 
-            op_amps_R: "3.2",
-            op_amps_Y: "3.4",
-            op_amps_B: "3.1",
+        //     op_amps_R: "3.2",
+        //     op_amps_Y: "3.4",
+        //     op_amps_B: "3.1",
 
-            ipe_vol_PE: "0.5",
-            ipe_vol_NE: "0.8",
+        //     ipe_vol_PE: "0.5",
+        //     ipe_vol_NE: "0.8",
 
-            comp_replaced: "Charging card q48$net cart q9",
-            comp_need_replace: "Charging card q48$net cart q9",
+        //     comp_replaced: "Charging card q48$net cart q9",
+        //     comp_need_replace: "Charging card q48$net cart q9",
 
-            technical_suggestion: "Regular maintenance recommended.",
-            customer_comment: "UPS running fine after repair.",
-            contact_name: "Arjun Mehta",
-            contact_design: "Maintenance Manager",
-            contact_num: "9988776655",
-            connected_load: "8 KVA",
-            eq_is_ok:"1",
-            eq_n_ok:"0",
-            CCO:"0",
-            CC:"0",
-        };
+        //     technical_suggestion: "Regular maintenance recommended.",
+        //     customer_comment: "UPS running fine after repair.",
+        //     contact_name: "Arjun Mehta",
+        //     contact_design: "Maintenance Manager",
+        //     contact_num: "9988776655",
+        //     connected_load: "8 KVA",
+        //     eq_is_ok:"1",
+        //     eq_n_ok:"0",
+        //     CCO:"0",
+        //     CC:"0",
+        // };
 
-        // data = req.body || data;
+        let data = req.body || "";
 
         let { comp_replacedDesc1, comp_replacedDesc2, comp_replacedDesc3, comp_replacedDesc4, comp_replacedDesc5, comp_replacedDesc6, comp_replacedDesc7, comp_replacedQnt1, comp_replacedQnt2, comp_replacedQnt3, comp_replacedQnt4, comp_replacedQnt5, comp_replacedQnt6, comp_replacedQnt7, comp_need_replaceDesc1, comp_need_replaceDesc2, comp_need_replaceDesc3, comp_need_replaceDesc4, comp_need_replaceDesc5, comp_need_replaceDesc6, comp_need_replaceDesc7, comp_need_replaceQnt1, comp_need_replaceQnt2, comp_need_replaceQnt3, comp_need_replaceQnt4, comp_need_replaceQnt5, comp_need_replaceQnt6, comp_need_replaceQnt7 } = mapLineItemsToVars(data.comp_replaced, data.comp_need_replace);
 // ✅ Flattened object using references only
@@ -195,15 +195,15 @@ async function postReport(req, res, next) {
 
             technical_suggestion: data.technical_suggestion || "",
             customer_comment: data.customer_comment || "",
-
+            customer_sign_seal: data.customer_sign_seal || "",
             contact_name: data.contact_name || "",
             contact_designation: data.contact_design || "",
             contact_number: data.contact_num || "",
-            eq_is_ok: "YES",
-            eq_n_ok: "NO",
-            CCO: "YES",
-            CC: "NO",
-            connected_load: "15KVA",
+            eq_is_ok: data.eq_is_ok || "",
+            eq_n_ok: data.eq_n_ok || "",
+            CCO: data.CCO || "",
+            CC: data.CC || "",
+            connected_load: data.connected_load || "",
         };
 
         console.log('line 202', flatData);
@@ -264,7 +264,8 @@ async function postReport(req, res, next) {
         });
 
         let fileName = 'sample_data';
-        let fileName2 = 'report_' + Date.now().toString();
+        // let fileName2 = 'report_' + Date.now().toString();
+        let fileName2 = 'report_' + 'file';
 
         fileName = fileName + '.docx';
         // var fileContents = Buffer.from(buf, "base64");
