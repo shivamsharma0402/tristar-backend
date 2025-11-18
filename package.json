@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^2.2.0",
+    "docx-pdf": "^0.0.1",
     "docxtemplater": "^3.67.4",
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
