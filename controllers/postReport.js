@@ -3,6 +3,8 @@ const path = require("path");
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 const { PDFDocument } = require("pdf-lib");
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const axios = require("axios");
 
 function mapLineItemsToVars(str1, str2) {
     // split items by $
@@ -292,48 +294,78 @@ async function postReport(req, res, next) {
                 return console.error(err);
             }
 
-            fs.unlink(filepathname, function (err) {
+            fs.unlink(filepathname, async function (err) {
                 if (err) return console.log(err);
                 // console.log('file deleted successfully');
                 fs.writeFileSync(filepathname, buf);
+                // var outputPath = path.resolve(rootpath + '/output/tmp/', fileName);
+                let ext = fileName.substr(fileName.lastIndexOf('.') + 1);
+                let urlLink = "https://tristar-backend.onrender.com" + "/getFile?file=" + fileName;
+                let options = {
+                method: 'POST',
+                url: 'https://getcapsaquality.com/api/payment/convertDocxUrl',
+                headers: {
+                    "Content-Type":"application/json",
+                    "Accept":"application/json",
+                },
+                data: {
+                    "fileUrl": urlLink
+                },
+
+            };
+                try {
+
+                    let response = await axios(options);
+                    let fileConvert = response.data;
+                    console.log(fileConvert)
+                    let pdf_file = fileConvert.data.url;
+                    
+                    
+                    let _data = { 'ext': 'pdf', 'url': pdf_file };
+                    // console.log('line 600', _data);
+                    return res.json({ "res": "success", data: _data, messg: 'All Set' });
+                } catch(error){
+                    throw error;
+                }
 
 
-                const libre = require('libreoffice-convert');
+
+                // const libre = require('libreoffice-convert');
 
 
-                const extend = '.pdf'
-                var file = fs.readFileSync(path.resolve(filepath, fileName));
-                // Convert it to pdf format with undefined filter (see Libreoffice doc about filter)
-                libre.convert(file, extend, undefined, async (err, done) => {
-                    if (err) {
-                        console.log(`Error converting file: ${err}`);
-                    }
-                    var fname = fileName2 + extend;
+                // const extend = '.pdf'
+                // var file = fs.readFileSync(path.resolve(filepath, fileName));
+                // // Convert it to pdf format with undefined filter (see Libreoffice doc about filter)
+                // libre.convert(file, extend, undefined, async (err, done) => {
+                //     if (err) {
+                //         console.log(`Error converting file: ${err}`);
+                //     }
+                //     var fname = fileName2 + extend;
 
-                    var outputPath = path.resolve(rootpath + '/output/tmp/', fname);
-                    // Here in done you have pdf file which you can save or transfer in another stream
-                    console.log('line 579', outputPath);
-                    fs.writeFileSync(outputPath, done);
+                //     var outputPath = path.resolve(rootpath + '/output/tmp/', fname);
+                //     // Here in done you have pdf file which you can save or transfer in another stream
+                //     console.log('line 579', outputPath);
+                //     fs.writeFileSync(outputPath, done);
 
                     
-                    // let pathFile = "/output/tmp/" + fname;
+                //     // let pathFile = "/output/tmp/" + fname;
                     
-                    try {
+                //     try {
 
-                        let ext = fname.substr(fname.lastIndexOf('.') + 1);
-                        let urlLink = "https://tristar-backend.onrender.com" + "/getFile?file=" + fname;
+                //         let ext = fname.substr(fname.lastIndexOf('.') + 1);
+                //         let urlLink = "https://tristar-backend.onrender.com" + "/getFile?file=" + fname;
 
-                        let _data = { 'ext': ext, 'url': urlLink };
-                        // console.log('line 600', _data);
-                        res.json({ "res": "success", data: _data, messg: 'All Set' });
+                //         let _data = { 'ext': ext, 'url': urlLink };
+                //         // console.log('line 600', _data);
+                //         res.json({ "res": "success", data: _data, messg: 'All Set' });
 
                     
-                } catch(error00) {
-                        console.log(error00);
-                        res.send(error00);
-                    }
+                // } catch(error00) {
+                //         console.log(error00);
+                //         res.send(error00);
+                //     }
 
-                });
+                // });
 
             });
         });
@@ -346,7 +378,7 @@ async function postReport(req, res, next) {
 
     } catch (error) {
         console.error("Error generating report:", error);
-        return res.status(500).json({ response: "error", message: "Failed to generate report" });
+        return res.status(500).json({ "res": "failed", data: {}, message: "Failed to generate report" });
     }
 }
 
