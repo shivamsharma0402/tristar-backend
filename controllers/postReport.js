@@ -3,6 +3,7 @@ const path = require("path");
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 const { PDFDocument } = require("pdf-lib");
+let testing = false;
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const axios = require("axios");
 
@@ -118,9 +119,9 @@ async function postReport(req, res, next) {
 // ✅ Flattened object using references only
         const flatData = {
             crm_id: data.crm_id || "",
-            received_on: data.received_on || "",
-            attended_on: data.attended_on || "",
-            cognised_on: data.cognised_on || "",
+            received_on: data.received_on.split("T")[0] || "",
+            attended_on: data.attended_on.split("T")[0] || "",
+            cognised_on: data.cognised_on.split("T")[0] || "",
 
             customer_name_address: data.customer_name_address || "",
             customer_contact_person: data.customer_contact_person || "",
@@ -273,7 +274,7 @@ async function postReport(req, res, next) {
         // var fileContents = Buffer.from(buf, "base64");
 
         // res.send(fileContents);
-        let filepath = path.resolve(rootpath + '/output/');
+        let filepath = path.resolve(rootpath + '/output/tmp');
 
         let _tmpFile = path.resolve(filepath, fileName);
         // console.log('line 539',_tmpFile)
@@ -300,7 +301,9 @@ async function postReport(req, res, next) {
                 fs.writeFileSync(filepathname, buf);
                 // var outputPath = path.resolve(rootpath + '/output/tmp/', fileName);
                 let ext = fileName.substr(fileName.lastIndexOf('.') + 1);
-                let urlLink = "https://tristar-backend.onrender.com" + "/getFile?file=" + fileName;
+                let domain = testing ? "http://localhost:3000": "https://tristar-backend.onrender.com"
+                let urlLink = domain + "/getFile?file=" + fileName;
+                console.log(urlLink)
                 let options = {
                 method: 'POST',
                 url: 'https://getcapsaquality.com/api/payment/convertDocxUrl',
