@@ -333,10 +333,11 @@ async function postReport(req, res, next) {
                     let fileName_00 = "converted_" + '1';
                     fileName_00 = fileName_00 + ".pdf"
                     const outputPath_00 = path.resolve(
-                        __dirname,
-                        "../../output/tmp/",
+                        rootpath + '/output/tmp',
                         fileName_00
                     );
+
+                    // rootpath + '/output/tmp' +
 
                     // Step 3: Convert to PDF
                     // const extend = '.pdf';
