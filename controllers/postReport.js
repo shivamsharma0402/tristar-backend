@@ -3,7 +3,6 @@ const path = require("path");
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 const { PDFDocument } = require("pdf-lib");
-let testing = false;
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const axios = require("axios");
 
@@ -207,6 +206,10 @@ async function postReport(req, res, next) {
             CCO: data.CCO || "",
             CC: data.CC || "",
             connected_load: data.connected_load || "",
+
+            engineer_name: data.engineer_name || "",
+            engineer_contact: data.engineer_contact || "", 
+            engineer_digital_signature: data.engineer_digital_signature.toUpperCase() || "", 
         };
 
         console.log('line 202', flatData);
@@ -301,8 +304,7 @@ async function postReport(req, res, next) {
                 fs.writeFileSync(filepathname, buf);
                 // var outputPath = path.resolve(rootpath + '/output/tmp/', fileName);
                 let ext = fileName.substr(fileName.lastIndexOf('.') + 1);
-                let domain = testing ? "http://localhost:3000": "https://tristar-backend.onrender.com"
-                let urlLink = domain + "/getFile?file=" + fileName;
+                let urlLink = process.env.DOMAIN + "/getFile?file=" + fileName;
                 console.log(urlLink)
                 let options = {
                 method: 'POST',
@@ -322,9 +324,37 @@ async function postReport(req, res, next) {
                     let fileConvert = response.data;
                     console.log(fileConvert)
                     let pdf_file = fileConvert.data.url;
+
+
+                    const response2 = await axios.get(pdf_file, { responseType: "arraybuffer" });
+                    const inputPDF = response2.data;
+
+                    // Step 2: Create temp file name
+                    let fileName_00 = "converted_" + '1';
+                    fileName_00 = fileName_00 + ".pdf"
+                    const outputPath_00 = path.resolve(
+                        __dirname,
+                        "../../output/tmp/",
+                        fileName_00
+                    );
+
+                    // Step 3: Convert to PDF
+                    // const extend = '.pdf';
+                    // const pdfData = await libre.convertAsync(inputPDF, extend, undefined);
+
+                    // Step 4: Save PDF
+                    fs.writeFileSync(outputPath_00, inputPDF);
+
+                    // Step 5: Generate tokenised URL for download
+                    // let sessionUser = { file: fileName + extend, path: "/output/tmp/" + fileName + extend, ext: "pdf" };
+                    // let _token = jwt.sign(sessionUser, "jwt", { expiresIn: "1d" });
+
+                    // let urlLink = config.urlLink + "signin/getFile?f=" + _token;
+                    let urlLink2 = process.env.DOMAIN + "/getFile?file=" + fileName_00;
+
                     
                     
-                    let _data = { 'ext': 'pdf', 'url': pdf_file };
+                    let _data = { 'ext': 'pdf', 'url': urlLink2 };
                     // console.log('line 600', _data);
                     return res.json({ "res": "success", data: _data, messg: 'All Set' });
                 } catch(error){

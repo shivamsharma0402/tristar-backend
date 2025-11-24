@@ -11,7 +11,8 @@ const Users = require("./models/UserData");
 const routes = require("./routes/routes");
 app.use('/output', express.static(path.join(__dirname, 'output')));
 rootpath = path.resolve(__dirname);
-
+let testing = false;
+process.env.DOMAIN = testing ? "http://localhost:3000": "https://tristar-backend.onrender.com"
 app.get('/getFile', (req, res) => {
   const file = req.query.file;
   const filePath = path.join(__dirname, 'output', 'tmp', file); // adjust folder
@@ -28,5 +29,5 @@ app.use(routes());
 
 app.listen(3000, async () => {
   await connectDB();
-  console.log("🚀 Server running on https://tristar-backend.onrender.com");
+  console.log("🚀 Server running on " + process.env.DOMAIN);
 });

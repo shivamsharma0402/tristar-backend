@@ -17,6 +17,7 @@
     "express": "^5.1.0",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.3.2",
+    "jsonwebtoken": "^9.0.2",
     "libreoffice-convert": "^1.7.0",
     "mongodb": "^7.0.0",
     "mongoose": "^8.19.3",
